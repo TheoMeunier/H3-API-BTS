@@ -13,7 +13,7 @@
 
 ### Fast setup
 ```bash
-git clone https://github.com/loic-fremaux/docker-laravel-template.git
+git clone https://github.com/TheoMeunier/H3-API-BTS/edit/main/README.md
 cd docker-laravel-template
 cp .env.example .env
 docker-compose up -d
