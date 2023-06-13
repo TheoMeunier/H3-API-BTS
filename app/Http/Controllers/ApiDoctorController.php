@@ -14,4 +14,21 @@ class ApiDoctorController extends Controller
 
         return DoctorResource::collection($doctors);
     }
+
+    public function show(int $id)
+    {
+        try {
+            $doctor = User::query()
+                ->where('id', $id)
+                ->firstOrFail();
+
+            return new DoctorResource($doctor);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 }

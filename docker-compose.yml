@@ -37,7 +37,7 @@ services:
     container_name: ${APP_SLUG}_database
     restart: unless-stopped
     ports:
-      - "3306:3006"
+      - "127.0.0.1:3306:3006"
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}

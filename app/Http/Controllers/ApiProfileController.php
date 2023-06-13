@@ -88,4 +88,22 @@ class ApiProfileController extends Controller
             ], 500);
         }
     }
+
+    public function delete(User $user)
+    {
+        try {
+            $user->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Delete account successfully',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 }

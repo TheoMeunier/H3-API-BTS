@@ -18,7 +18,6 @@ class ApiAuthController extends Controller
                 'last_name' => 'required',
                 'first_name' => 'required',
                 'email' => 'required',
-                'phone' => 'required|min:9',
                 'password' => 'required'
             ]);
 
@@ -33,7 +32,6 @@ class ApiAuthController extends Controller
                 User::create([
                     'last_name' => $request->get('last_name'),
                     'first_name' => $request->get('first_name'),
-                    'phone' => $request->get('phone'),
                     'email' => $request->get('email'),
                     'is_doctor' => $request->get('is_doctor') ?? false,
                     'password' => Hash::make($request->get('password')),
@@ -90,11 +88,6 @@ class ApiAuthController extends Controller
                 'message' => $th->getMessage(),
             ], 500);
         }
-    }
-
-    public function resetPassword(Request $request)
-    {
-
     }
 
     public function logout(): JsonResponse

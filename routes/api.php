@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\ApiAppointmentController;
 use App\Http\Controllers\ApiDoctorController;
 use App\Http\Controllers\ApiProfileController;
 use Illuminate\Http\Request;
@@ -31,7 +32,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', 'index');
         Route::post('/edit', 'update');
         Route::post('/edit/password', 'updatePassword');
+        Route::post('/delete/{user}', 'delete');
     });
 
-    Route::get('/doctors', [ApiDoctorController::class, 'index']);
+    Route::controller(ApiDoctorController::class)->prefix('/doctors')->group(function () {
+        Route::get('/doctors', 'index');
+        Route::get('/doctors/{id}', 'show');
+    });
+
+    Route::controller(ApiAppointmentController::class)->prefix('/appoints')->group(function () {
+        Route::get('/doctors/{id}/hours', 'hours');
+        Route::get('/doctors/{id}', 'allDoctors');
+        Route::post('/create', 'add');
+
+        //patient
+        Route::get('/past/patients/{id}', 'patientPast');
+        Route::get('/future/patients/{id}', 'patientFuture');
+    });
 });
