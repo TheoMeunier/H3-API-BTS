@@ -2,34 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\AppointmentDoctorResource;
+use App\Http\Resources\AppointmentPatientResource;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiAppointmentController extends Controller
 {
-    //Doctor
-    //tout pour un medecin
-    public function allDoctor(int $id)
-    {
-        $appointments = Appointment::query()
-            ->with('user')
-            ->where('id_doctor', '=', $id)
-            ->firstOrFail();
-
-        return AppointmentResource::collection($appointments);
-    }
-
-    //Patient
-    //Prendre un rendez vous
-    public function add(Request $request)
+    public function add(Request $request): ?JsonResponse
     {
         try {
             Appointment::create([
                 'date' => $request->get('date'),
-                'id_doctor' => $request->get('id_doctor'),
-                'id_patient' => auth()->id()
+                'doctor_id' => $request->get('doctor_id'),
+                'patient_id' => auth()->id()
             ]);
 
             return response()->json([
@@ -45,26 +34,35 @@ class ApiAppointmentController extends Controller
         }
     }
 
-    //rendez vous passé
-    public function pastPatient(int $id)
+    public function past(): AnonymousResourceCollection
     {
-        $appointments = Appointment::query()
-            ->with(['user'])
-            ->where('id_patient', '=', $id)
-            ->where('date', '<=', Carbon::now())
-            ->firstOrFail();
+        $column = auth()->user()->is_doctor ? 'doctor_id' : 'patient_id';
 
-        return AppointmentResource::collection($appointments);
+        $appointments = Appointment::query()
+            ->where($column, '=', auth()->id())
+            ->where('date', '<', Carbon::now())
+            ->get();
+
+        if (auth()->user()->is_doctor) {
+            return AppointmentDoctorResource::collection($appointments);
+        } else {
+            return AppointmentPatientResource::collection($appointments);
+        }
     }
 
-    //rendez vous avenir
-    public function futurePatient(int $id)
+    public function futur(): AnonymousResourceCollection
     {
-        $appointments = Appointment::query()
-            ->where('id_patient', '=', $id)
-            ->where('date', '>=', Carbon::now())
-            ->firstOrFail();
+        $column = auth()->user()->is_doctor ? 'doctor_id' : 'patient_id';
 
-        return AppointmentResource::collection($appointments);
+        $appointments = Appointment::query()
+            ->where($column, '=', auth()->id())
+            ->where('date', '>', Carbon::now())
+            ->get();
+
+        if (auth()->user()->is_doctor) {
+            return AppointmentDoctorResource::collection($appointments);
+        } else {
+            return AppointmentPatientResource::collection($appointments);
+        }
     }
 }

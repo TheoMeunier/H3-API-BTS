@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DoctorResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ApiDoctorController extends Controller
@@ -15,7 +16,11 @@ class ApiDoctorController extends Controller
         return DoctorResource::collection($doctors);
     }
 
-    public function show(int $id)
+    /**
+     * @param int $id
+     * @return DoctorResource|JsonResponse
+     */
+    public function show(int $id): DoctorResource|JsonResponse
     {
         try {
             $doctor = User::query()

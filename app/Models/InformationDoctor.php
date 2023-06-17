@@ -11,11 +11,11 @@ class InformationDoctor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_id', 'speciality', 'address', 'postal_code', 'city', 'description', 'rates'];
+    protected $fillable = ['doctor_id', 'speciality', 'phone', 'address', 'postal_code', 'city', 'description', 'rates'];
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'id_doctor');
     }
 
     public function appointment(): BelongsTo

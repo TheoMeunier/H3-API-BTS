@@ -13,9 +13,9 @@ class InformationPatient extends Model
 
     protected $fillable = ['phone', 'birthday_date', 'nationality'];
 
-    public function user(): HasOne
+    public function user(): belongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'id_patient');
     }
 
     public function appointment(): BelongsTo

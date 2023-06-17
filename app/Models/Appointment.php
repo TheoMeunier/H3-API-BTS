@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Appointment extends Model
@@ -12,13 +13,13 @@ class Appointment extends Model
 
     protected $fillable = ['id_doctor', 'id_patient', 'date', 'content'];
 
-    public function patient(): HasMany
+    public function patient(): BelongsTo
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class, 'patient_id');
     }
 
-    public function doctor(): HasMany
+    public function doctor(): BelongsTo
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 }

@@ -3,11 +3,10 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProfileResource extends JsonResource
+class PatientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +17,13 @@ class ProfileResource extends JsonResource
     {
         /** @var User $this */
         return [
-            'last_name' => $this->last_name,
+            'id' => $this->id,
             'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'email' => $this->email,
-            'phone' => $this->phone,
-            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y')
+            'phone' => $this->informationPatient->phone,
+            'nationality' => $this->informationPatient->nationality,
+            'birthday_date' => $this->informationPatient->birthday_date,
         ];
     }
 }

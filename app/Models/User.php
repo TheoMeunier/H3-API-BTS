@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -49,13 +51,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function informationPatient(): BelongsTo
+    public function informationPatient(): hasOne
     {
-        return $this->belongsTo(InformationPatient::class);
+        return $this->hasOne(InformationPatient::class, 'id_patient');
     }
 
-    public function informationDoctor(): BelongsTo
+    public function informationDoctor(): hasOne
     {
-        return $this->belongsTo(InformationDoctor::class);
+        return $this->hasOne(InformationDoctor::class, 'id_doctor');
+    }
+
+    public function appointmentsDoctor(): HasMany
+    {
+        return $this->HasMany(Appointment::class, 'doctor_id');
+    }
+
+    public function appointmentsPatient(): HasMany
+    {
+        return $this->HasMany(Appointment::class, 'patient_id');
     }
 }

@@ -32,21 +32,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', 'index');
         Route::post('/edit', 'update');
         Route::post('/edit/password', 'updatePassword');
-        Route::post('/delete/{user}', 'delete');
+        Route::post('/edit/information', 'updateInformation');
+        Route::post('/delete', 'delete');
     });
 
     Route::controller(ApiDoctorController::class)->prefix('/doctors')->group(function () {
-        Route::get('/doctors', 'index');
-        Route::get('/doctors/{id}', 'show');
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
     });
 
     Route::controller(ApiAppointmentController::class)->prefix('/appoints')->group(function () {
-        Route::get('/doctors/{id}/hours', 'hours');
-        Route::get('/doctors/{id}', 'allDoctors');
+        Route::get('/doctors', 'allByDoctor');
         Route::post('/create', 'add');
 
-        //patient
-        Route::get('/past/patients/{id}', 'patientPast');
-        Route::get('/future/patients/{id}', 'patientFuture');
+        Route::get('/past', 'past');
+        Route::get('/future', 'futur');
     });
 });
